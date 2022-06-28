@@ -3,45 +3,56 @@ description: 'An action to setup docker compose environment within GitHub Action
 inputs:
   file:
     description: 'the file to parse targets from, normally compose.yml. supported extentions: yml, json'
+    type: string
     required: true
   cache-key:
     description: 'the cache key to use for saving build data. defaults to "default"'
+    type: string
     required: false
     default: 'default'
   registry:
     description: 'whether to use a local registry or not. defaults to false'
+    type: boolean
     required: false
     default: false
   localhost:
     description: 'whether to replace targets registry to localhost or not. registry must be true to use this. defaults to false'
+    type: boolean
     required: false
     default: false
   pull:
     description: 'whether to pull targets images. defaults to false'
+    type: boolean
     required: false
     default: false
   pull-opts:
     description: 'options to pass to docker compose pull. pull must be true to use this. defaults to ""'
+    type: string
     required: false
     default: ""
   bake:
     description: 'whether to bake targets. defaults to false'
+    type: boolean
     required: false
     default: false
   push:
     description: 'whether to push targets images after baking. bake must be true to use this. defaults to false'
+    type: boolean
     required: false
     default: false
   bake-opts:
     description: 'options to pass to docker buildx bake. bake must be true to use this. defaults to ""'
+    type: string
     required: false
     default: ""
   up:
     description: 'whether to boot up docker compose. defaults to true'
+    type: boolean
     required: false
     default: true
   up-opts:
     description: 'options to pass to docker compose up. up must be true to use this. defaults to "-d"'
+    type: string
     required: false
     default: "-d"
   dry-run:
@@ -51,7 +62,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - if: inputs.bake == true
+    - if: fromJson(inputs.bake)
       uses: actions/cache@v3
       with:
         path: /tmp/.buildx-cache
@@ -59,12 +70,12 @@ runs:
         restore-keys: |
           ${{ inputs.cache-key }}-buildx-cache-${{ github.ref }}
           ${{ inputs.cache-key }}-buildx-cache-
-    - if: inputs.bake == true
+    - if: fromJson(inputs.bake)
       id: buildx
       uses: docker/setup-buildx-action@v1
       with:
         driver-opts: network=host
-    - if: inputs.registry == true
+    - if: fromJson(inputs.registry)
       uses: actions/cache@v3
       with:
         path: /tmp/docker-registry
@@ -72,24 +83,24 @@ runs:
         restore-keys: |
           ${{ inputs.cache-key }}-docker-registry-${{ github.ref }}
           ${{ inputs.cache-key }}-docker-registry-
-    - if: inputs.registry == true
+    - if: fromJson(inputs.registry)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2; \
         $prefix npx wait-on tcp:5000
-    - if: inputs.localhost == true
+    - if: fromJson(inputs.localhost)
       id: localhost
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix echo TODO: localhost conversion
-    - if: inputs.pull == true
+    - if: fromJson(inputs.pull)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix docker compose -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
-    - if: inputs.bake == true
+    - if: fromJson(inputs.bake)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
@@ -100,7 +111,7 @@ runs:
             --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
             $action \
             -f "${{ inputs.file }}" ${{ inputs.bake-opts }}
-    - if: inputs.up == true
+    - if: fromJson(inputs.up)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
