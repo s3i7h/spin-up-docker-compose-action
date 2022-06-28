@@ -1,0 +1,51 @@
+name: 'Setup Docker Compose'
+description: 'An action to setup docker compose environment within GitHub Actions.'
+inputs:
+  file:
+    description: 'the file to parse targets from, normally compose.yml. supported extentions: yml, json'
+    required: true
+  cache-key:
+    description: 'the cache key to use for saving build data. defaults to "default"'
+    required: false
+    default: 'default'
+  registry:
+    description: 'whether to use a local registry or not. defaults to false'
+    required: false
+    default: false
+  localhost:
+    description: 'whether to replace targets registry to localhost or not. registry must be true to use this. defaults to false'
+    required: false
+    default: false
+  pull:
+    description: 'whether to pull targets images. defaults to false'
+    required: false
+    default: false
+  pull-opts:
+    description: 'options to pass to docker compose pull. pull must be true to use this. defaults to ""'
+    required: false
+    default: ""
+  bake:
+    description: 'whether to bake targets. defaults to false'
+    required: false
+    default: false
+  push:
+    description: 'whether to push targets images after baking. bake must be true to use this. defaults to false'
+    required: false
+    default: false
+  bake-opts:
+    description: 'options to pass to docker buildx bake. bake must be true to use this. defaults to ""'
+    required: false
+    default: ""
+  up:
+    description: 'whether to boot up docker compose. defaults to true'
+    required: false
+    default: true
+  up-opts:
+    description: 'options to pass to docker compose up. up must be true to use this. defaults to "-d"'
+    required: false
+    default: "-d"
+runs:
+  using: "composite"
+  steps:
+    - run: echo ${{ inputs }}
+      shell: bash
