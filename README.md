@@ -21,9 +21,9 @@ steps:
 * `registry: bool`: whether to use a local registry or not. defaults to false 
 * `localhost: bool`: whether to replace targets' registry to localhost or not. `registry` must be true to use this. defaults to false
 * `pull: bool`: whether to pull targets' images. defaults to false
-* `pull-opts: string`: options to pass to pull. `pull` must be true to use this. defaults to ""
+* `pull-opts: string`: options to pass to `docker compose pull`. `pull` must be true to use this. defaults to ""
 * `bake: bool`: whether to bake targets. defaults to false
 * `push: bool`: whether to push targets' images after baking. `bake` must be true to use this. defaults to false
-* `bake-opts: string`: options to pass to bake. `bake` must be true to use this. defaults to ""
+* `bake-opts: string`: options to pass to `docker buildx bake`. `bake` must be true to use this. defaults to ""
 * `up: bool`: whether to boot up docker compose. defaults to true
-* `up-opts: string`: options to pass to docker compose up. `up` must be true to use this. defaults to "-d"
+* `up-opts: string`: options to pass to `docker compose up`. `up` must be true to use this. defaults to "-d"
