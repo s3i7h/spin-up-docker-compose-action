@@ -44,8 +44,66 @@ inputs:
     description: 'options to pass to docker compose up. up must be true to use this. defaults to "-d"'
     required: false
     default: "-d"
+  dry-run:
+    description: '[debugging] dry-run the action'
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:
-    - run: echo ${{ inputs }}
+    - if: inputs.bake
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ inputs.cache-key }}-buildx-cache-${{ github.ref }}-${{ github.sha }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-buildx-cache-${{ github.ref }}
+          ${{ inputs.cache-key }}-buildx-cache-
+    - if: inputs.bake
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+      with:
+        driver-opts: network=host
+    - if: inputs.registry
+      uses: actions/cache@v3
+      with:
+        path: /tmp/docker-registry
+        key: ${{ inputs.cache-key }}-docker-registry-${{ github.ref }}-${{ github.sha }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-docker-registry-${{ github.ref }}
+          ${{ inputs.cache-key }}-docker-registry-
+    - if: inputs.registry
       shell: bash
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        $prefix docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2; \
+        $prefix npx wait-on tcp:5000
+    - if: inputs.localhost
+      id: localhost
+      shell: bash
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        $prefix echo TODO: localhost conversion
+    - if: inputs.pull
+      shell: bash
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        $prefix docker compose -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
+    - if: inputs.bake
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
+        $prefix docker buildx bake \
+            --builder="${{ steps.buildx.outputs.name }}" \
+            --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
+            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
+            $action \
+            -f "${{ inputs.file }}" ${{ inputs.bake-opts }}
+    - if: inputs.up
+      shell: bash
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        $prefix docker compose -f "${{ inputs.file }}" up ${{ inputs.up-opts }}
