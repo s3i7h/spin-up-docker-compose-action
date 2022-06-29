@@ -107,7 +107,7 @@ runs:
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
         $prefix cd $(dirname ${{ inputs.file }}); \
         $prefix docker buildx bake -f "$(basename ${{ inputs.file }})" --print > build_config.json; \
-        $prefix { cat build_config.json | jq --arg name "$(basename "$PWD")" '{group: .group, target: (.target|to_entries|[.[]|{(.key):(.value + {"tags":[$name + "_" + .key]})}]|add)}' } > build_config_modified.json; \
+        $prefix jq --arg name "$(basename "$PWD")" '{group: .group, target: (.target|to_entries|[.[]|{(.key):(.value + {"tags":[$name + "_" + .key]})}]|add)}' build_config.json > build_config_modified.json; \
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
