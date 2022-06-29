@@ -104,13 +104,13 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        [ "${{ inputs.push }}" = "true" ]&&action="--set='"'*'".output=type=image'"||action="--set='"'*'".output=type=image'"; \
+        [ "${{ inputs.push }}" = "true" ]&&action="--set='*.output=type=image'"||action="--set='*.output=type=image'"; \
         $prefix cd $(dirname ${{ inputs.file }}); \
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
             --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
-            $action \
+            --set='*.output=type=image' \
             -f "$(basename ${{ inputs.file }})" ${{ inputs.bake-opts }}
     - if: fromJson(inputs.up)
       shell: bash
