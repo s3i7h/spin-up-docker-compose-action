@@ -112,7 +112,7 @@ runs:
 #            --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
 #            $action \
 #            -f "$(basename ${{ inputs.file }})" ${{ inputs.bake-opts }}; \
-        $prefix docker compose build
+        $prefix docker compose build; \
         $prefix docker image ls
     - if: fromJson(inputs.up)
       shell: bash
