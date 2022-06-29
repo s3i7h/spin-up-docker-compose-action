@@ -103,7 +103,7 @@ runs:
     - if: fromJson(inputs.bake)
       shell: bash
       run: |
-#        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
 #        [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
 #        $prefix cd $(dirname ${{ inputs.file }}); \
 #        $prefix docker buildx bake \
