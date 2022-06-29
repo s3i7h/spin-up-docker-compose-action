@@ -38,3 +38,4 @@ jobs:
           dry-run: true
   simple-docker-compose:
     uses: ./.github/simple-docker-compose/simple-docker-compose.yml
+    secrets: inherit
