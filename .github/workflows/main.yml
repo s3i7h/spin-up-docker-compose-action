@@ -4,7 +4,7 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push events
   push: 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  ci:
+  dry-run:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -36,3 +36,5 @@ jobs:
           up: true
           up-opts: "--up-opt"
           dry-run: true
+  simple-docker-compose:
+    uses: ./examples/simple-docker-compose/.github/workflows/main.yml

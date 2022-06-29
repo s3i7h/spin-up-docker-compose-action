@@ -1,0 +1,5 @@
+version: 'Compose-Spec'
+
+services:
+  batch-runner:
+      image: ubuntu:latest

@@ -1,0 +1,21 @@
+name: Simple Docker Compose
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  workflow_call:
+jobs:
+  test_batch_runner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Docker Compose
+        uses: yu-ichiro/setup-docker-compose-action@main
+        with:
+          file: simple-docker-compose/compose.yml
+      - name: Check Batch Runner
+        run: docker compose exec batch-runner bash -c 'echo Hello, World'
