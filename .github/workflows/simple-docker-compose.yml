@@ -4,12 +4,12 @@ name: Simple Docker Compose
 # Controls when the workflow will run
 on:
   workflow_call:
-    inputs: {}
-    secrets: {}
+    inputs: { }
+    secrets: { }
 env:
   COMPOSE_FILE: examples/simple-docker-compose/compose.yml
 jobs:
-  test_batch_runner:
+  simple-docker-compose:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

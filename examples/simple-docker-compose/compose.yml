@@ -2,5 +2,5 @@ version: 'Compose-Spec'
 
 services:
   batch-runner:
-      image: ubuntu:latest
-      tty: true
+    image: ubuntu:latest
+    tty: true

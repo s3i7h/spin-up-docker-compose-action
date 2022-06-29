@@ -38,3 +38,5 @@ jobs:
           dry-run: true
   simple-docker-compose:
     uses: ./.github/workflows/simple-docker-compose.yml
+  pull-and-bake:
+    uses: ./.github/workflows/pull-and-bake.yml

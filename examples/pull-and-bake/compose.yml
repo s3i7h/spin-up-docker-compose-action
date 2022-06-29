@@ -1,0 +1,13 @@
+version: 'Compose-Spec'
+
+services:
+  echo:
+    image: hashicorp/http-echo:latest
+    command: |
+      -text="Hello, World"
+    ports:
+      - 5678:5678
+  my-runner:
+    build:
+      context: .
+    tty: true
