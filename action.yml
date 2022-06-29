@@ -2,7 +2,7 @@ name: 'Setup Docker Compose'
 description: 'An action to setup docker compose environment within GitHub Actions.'
 inputs:
   file:
-    description: 'the file to parse targets from, normally compose.yml. supported extentions: yml, json'
+    description: 'the file to parse targets from, normally compose.yml. supported extensions: yml, json'
     type: string
     required: true
   cache-key:
@@ -105,6 +105,7 @@ runs:
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
+        $prefix cd $(dirname ${{ inputs.file }}); \
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
