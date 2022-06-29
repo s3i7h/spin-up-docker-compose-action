@@ -25,4 +25,14 @@ jobs:
         uses: ./
         with:
           file: compose.yml
+          cache-key: custom
+          registry: true
+          localhost: true
+          pull: true
+          pull-opts: "--pull-opt"
+          bake: true
+          bake-opts: "--bake-opt"
+          push: true
+          up: true
+          up-opts: "--up-opt"
           dry-run: true
