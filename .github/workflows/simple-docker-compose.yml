@@ -15,6 +15,6 @@ jobs:
       - name: Setup Docker Compose
         uses: ./
         with:
-          file: simple-docker-compose/compose.yml
+          file: examples/simple-docker-compose/compose.yml
       - name: Check Batch Runner
         run: docker compose exec batch-runner bash -c 'echo Hello, World'
