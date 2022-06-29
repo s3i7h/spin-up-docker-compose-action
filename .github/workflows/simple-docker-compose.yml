@@ -6,6 +6,8 @@ on:
   workflow_call:
     inputs: {}
     secrets: {}
+env:
+  COMPOSE_FILE: examples/simple-docker-compose/compose.yml
 jobs:
   test_batch_runner:
     runs-on: ubuntu-latest
@@ -15,6 +17,6 @@ jobs:
       - name: Setup Docker Compose
         uses: ./
         with:
-          file: examples/simple-docker-compose/compose.yml
+          file: ${{ env.COMPOSE_FILE }}
       - name: Check Batch Runner
-        run: docker compose exec batch-runner bash -c 'echo Hello, World'
+        run: docker compose -f ${{ env.COMPOSE_FILE }} exec batch-runner bash -c 'echo Hello, World'
