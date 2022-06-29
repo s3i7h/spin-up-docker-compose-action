@@ -37,4 +37,4 @@ jobs:
           up-opts: "--up-opt"
           dry-run: true
   simple-docker-compose:
-    uses: ./examples/simple-docker-compose/.github/workflows/main.yml
+    uses: ./.github/simple-docker-compose/simple-docker-compose.yml
