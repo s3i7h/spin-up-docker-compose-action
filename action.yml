@@ -111,7 +111,7 @@ runs:
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
             --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
             $action \
-            -f "${{ inputs.file }}" ${{ inputs.bake-opts }}
+            -f "$(basename ${{ inputs.file }})" ${{ inputs.bake-opts }}
     - if: fromJson(inputs.up)
       shell: bash
       run: |
