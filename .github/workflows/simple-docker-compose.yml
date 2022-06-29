@@ -1,9 +1,11 @@
+# see examples/simple-docker-compose.yml/.github/main.yml
 name: Simple Docker Compose
 
 # Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_call:
+    inputs: {}
+    secrets: {}
 jobs:
   test_batch_runner:
     runs-on: ubuntu-latest
