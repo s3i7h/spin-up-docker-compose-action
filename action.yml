@@ -104,7 +104,7 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
+        [ "${{ inputs.push }}" = "true" ]&&action="--set='*.output=type=image'"||action="--set='*.output=type=image'"; \
         $prefix cd $(dirname ${{ inputs.file }}); \
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
