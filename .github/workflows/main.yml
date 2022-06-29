@@ -37,6 +37,7 @@ jobs:
           up-opts: "--up-opt"
           dry-run: true
   simple-docker-compose:
+    needs: dry-run
     uses: ./.github/simple-docker-compose/simple-docker-compose.yml
     with: {}
     secrets: inherit
