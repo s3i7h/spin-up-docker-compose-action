@@ -106,14 +106,14 @@ runs:
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
         $prefix cd $(dirname ${{ inputs.file }}); \
+        $prefix docker buildx bake -f "$(basename ${{ inputs.file }})" --print > build_config.json; \
+        $prefix { cat build_config.json | jq --arg name "$(basename "$PWD")" '{group: .group, target: (.target|to_entries|[.[]|{(.key):(.value + {"tags":[$name + "_" + .key]})}]|add)}' } > build_config_modified.json; \
         $prefix docker buildx bake \
-            --metadata-file metadata.json \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
             --set='*.cache-to=type=local,dest=/tmp/.buildx-cache' \
             $action \
-            -f "$(basename ${{ inputs.file }})" ${{ inputs.bake-opts }}; \
-        $prefix cat metadata.json; \
+            -f "build_config_modified.json" ${{ inputs.bake-opts }}; \
         $prefix docker image ls
     - if: fromJson(inputs.up)
       shell: bash
