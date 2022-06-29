@@ -17,8 +17,8 @@ jobs:
       - name: Setup Docker Compose
         uses: ./
         with:
-          file: ${{ COMPOSE_FILE }}
+          file: ${{ env.COMPOSE_FILE }}
           pull: true
           bake: true
       - name: Check Batch Runner
-        run: docker compose -f ${{ COMPOSE_FILE }} exec my-runner bash -c 'cat <(curl -s echo:5678) /the_message'
+        run: docker compose -f ${{ env.COMPOSE_FILE }} exec my-runner bash -c 'cat <(curl -s echo:5678) /the_message'
