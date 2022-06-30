@@ -103,7 +103,7 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix python ${{ github.action_path }}convert.py
+        $prefix python ${{ github.action_path }}convert.py ${{ inputs.file }}
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
