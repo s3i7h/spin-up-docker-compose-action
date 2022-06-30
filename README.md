@@ -16,7 +16,7 @@ steps:
 
 # Options
 
-* `file: required string`: the file to parse targets from, normally compose.yml. supported extentions: `yml`, `json`
+* `file: required string`: the file to parse targets from, normally compose.yml. supported format: `yaml`
 * `cache-key: string`: the cache key to use for saving build data. defaults to `"default"`
 * `shared: bool`: whether to use local registry to share built images. this enables `registry` and `localhost`. defaults to `false`
 * `registry: bool`: whether to use a local registry or not. defaults to `false`
