@@ -1,6 +1,6 @@
 name: 'Spin-Up Docker Compose'
 author: yu-ichiro
-description: 'An action to setup docker compose environment within GitHub Actions.'
+description: 'An action to spin up docker compose environment within GitHub Actions.'
 branding:
   icon: box
   color: blue
