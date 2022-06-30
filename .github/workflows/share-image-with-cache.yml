@@ -19,8 +19,7 @@ jobs:
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: share-image-with-cache
-          registry: true
-          localhost: true
+          shared: true
           bake: true
           push: true
   use_image:
@@ -34,8 +33,7 @@ jobs:
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: share-image-with-cache
-          registry: true
-          localhost: true
+          shared: true
           pull: true
       - name: Check Batch Runner
         run: docker compose -f ${{ env.COMPOSE_FILE }} exec my-runner bash -c 'cat <(curl -s echo:5678) /the_message'

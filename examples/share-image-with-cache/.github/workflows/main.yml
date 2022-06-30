@@ -16,8 +16,7 @@ jobs:
         uses: yu-ichiro/setup-docker-compose-action@main
         with:
           file: compose.yml
-          registry: true
-          localhost: true
+          shared: true
           bake: true
           push: true
   use_image:
@@ -30,8 +29,7 @@ jobs:
         uses: yu-ichiro/setup-docker-compose-action@main
         with:
           file: compose.yml
-          registry: true
-          localhost: true
+          shared: true
           pull: true
       - name: Check Batch Runner
         run: docker compose exec my-runner bash -c 'cat <(curl -s echo:5678) /the_message'

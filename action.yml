@@ -10,6 +10,11 @@ inputs:
     type: string
     required: false
     default: 'default'
+  shared:
+    description: 'whether to use local registry to share built images. this enables `registry` and `localhost`. defaults to false'
+    type: boolean
+    required: false
+    default: false
   registry:
     description: 'whether to use a local registry or not. defaults to false'
     type: boolean
@@ -75,7 +80,7 @@ runs:
       uses: docker/setup-buildx-action@v1
       with:
         driver-opts: network=host
-    - if: fromJson(inputs.registry)
+    - if: fromJson(inputs.registry) || fromJson(inputs.shared)
       uses: actions/cache@v3
       with:
         path: /tmp/docker-registry
@@ -83,18 +88,18 @@ runs:
         restore-keys: |
           ${{ inputs.cache-key }}-docker-registry-${{ github.ref }}
           ${{ inputs.cache-key }}-docker-registry-
-    - if: fromJson(inputs.registry)
+    - if: fromJson(inputs.registry) || fromJson(inputs.shared)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2; \
         $prefix npx wait-on tcp:5000
-    - if: fromJson(inputs.bake) || fromJson(inputs.localhost)
+    - if: fromJson(inputs.bake) || fromJson(inputs.localhost) || fromJson(inputs.shared)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix pip install -r ${{ github.action_path }}requirements.txt
-    - if: fromJson(inputs.localhost)
+    - if: (fromJson(inputs.registry) && fromJson(inputs.localhost)) || fromJson(inputs.shared)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
