@@ -1,6 +1,6 @@
 import os.path
 import sys
-from typing import TypedDict, Optional
+from typing import TypedDict, Optional, Dict, List
 
 import yaml
 
@@ -15,7 +15,7 @@ class Service(TypedDict):
 
 
 class ComposeYml(TypedDict):
-    services: dict[str, Service]
+    services: Dict[str, Service]
 
 
 def convert(context_name: str, compose: ComposeYml) -> ComposeYml:

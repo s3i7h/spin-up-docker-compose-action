@@ -1,16 +1,16 @@
 import os.path
 import sys
-from typing import TypedDict, Optional
+from typing import TypedDict, Optional, Dict, List
 
 import json
 
 
 class Target(TypedDict):
-    tags: Optional[list[str]]
+    tags: Optional[List[str]]
 
 
 class BuildManifest(TypedDict):
-    target: dict[str, Target]
+    target: Dict[str, Target]
 
 
 def add_tag(context_name: str, manifest: BuildManifest) -> BuildManifest:
