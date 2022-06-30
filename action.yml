@@ -109,8 +109,8 @@ runs:
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
+        $prefix python ${{ github.action_path }}convert.py add_image_tag ${{ inputs.file }}; \
         $prefix cd $(dirname ${{ inputs.file }}); \
-        $prefix python ${{ github.action_path }}convert.py add_image_tag ${{ inputs.file }}
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
