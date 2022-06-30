@@ -18,5 +18,6 @@ jobs:
         uses: ./
         with:
           file: ${{ env.COMPOSE_FILE }}
+          cache-key: simple-docker-compose
       - name: Check Batch Runner
         run: docker compose -f ${{ env.COMPOSE_FILE }} exec batch-runner bash -c 'echo Hello, World'

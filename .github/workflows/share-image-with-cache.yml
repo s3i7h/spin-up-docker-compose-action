@@ -1,5 +1,5 @@
-# see examples/pull-and-bake.yml/.github/main.yml
-name: Pull and Bake
+# see examples/share-image-with-cache/.github/main.yml
+name: Share Image with Cache
 
 # Controls when the workflow will run
 on:
@@ -7,7 +7,7 @@ on:
     inputs: { }
     secrets: { }
 env:
-  COMPOSE_FILE: examples/pull-and-bake/compose.yml
+  COMPOSE_FILE: examples/share-image-with-cache/compose.yml
 jobs:
   build_image:
     runs-on: ubuntu-latest
@@ -18,6 +18,7 @@ jobs:
         uses: ./
         with:
           file: ${{ env.COMPOSE_FILE }}
+          cache-key: share-image-with-cache
           registry: true
           localhost: true
           bake: true
@@ -31,6 +32,7 @@ jobs:
         uses: ./
         with:
           file: ${{ env.COMPOSE_FILE }}
+          cache-key: share-image-with-cache
           registry: true
           localhost: true
           pull: true

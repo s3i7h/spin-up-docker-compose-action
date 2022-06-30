@@ -40,3 +40,5 @@ jobs:
     uses: ./.github/workflows/simple-docker-compose.yml
   pull-and-bake:
     uses: ./.github/workflows/pull-and-bake.yml
+  share-image-with-cache:
+    uses: ./.github/workflows/share-image-with-cache.yml
