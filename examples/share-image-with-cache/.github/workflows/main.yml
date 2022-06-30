@@ -1,0 +1,36 @@
+name: Share Image with Cache
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Docker Compose
+        uses: yu-ichiro/setup-docker-compose-action@main
+        with:
+          file: compose.yml
+          registry: true
+          localhost: true
+          bake: true
+  use_image:
+    needs: build_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Docker Compose
+        uses: yu-ichiro/setup-docker-compose-action@main
+        with:
+          file: compose.yml
+          registry: true
+          localhost: true
+          pull: true
+      - name: Check Batch Runner
+        run: docker compose exec my-runner bash -c 'cat <(curl -s echo:5678) /the_message'
