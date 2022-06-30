@@ -1,5 +1,9 @@
-name: 'Setup Docker Compose'
+name: 'Set-up Docker Compose'
+author: yu-ichiro
 description: 'An action to setup docker compose environment within GitHub Actions.'
+branding:
+  icon: box
+  color: blue
 inputs:
   file:
     description: 'the file to parse targets from, normally compose.yml. supported extensions: yml, json'
