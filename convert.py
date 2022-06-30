@@ -18,30 +18,45 @@ class ComposeYml(TypedDict):
     services: Dict[str, Service]
 
 
-def convert(context_name: str, compose: ComposeYml, local: bool) -> ComposeYml:
+def add_image_tag(context_name: str, compose: ComposeYml) -> ComposeYml:
     for name, service in compose["services"].items():
         if not service.get("build"):
             continue
         image_tag = f"{context_name}_{name}:latest"
         if "image" not in service:
             service["image"] = image_tag
-        if local:
-            service["image"] = f"localhost:5000/{image_tag}"
+    return compose
+
+
+def replace_image_tag_to_local(context_name: str, compose: ComposeYml) -> ComposeYml:
+    for name, service in compose["services"].items():
+        if not service.get("build"):
+            continue
+        image_tag = f"{context_name}_{name}:latest"
+        service["image"] = f"localhost:5000/{image_tag}"
     return compose
 
 
 def main():
     argc = len(sys.argv)
     if argc < 2:
-        print("yaml filename is required")
+        print("command name is required")
         return sys.exit(1)
     if argc < 3:
-        print("mode (remote|local) is required")
+        print("yaml filename is required")
         return sys.exit(1)
-    _, filename, mode, *_ = sys.argv
+    _, command, filename, *_ = sys.argv
 
-    if mode not in ("remote", "local"):
-        print(f"mode must be one of `remote` or `local`: {mode} given")
+    commands = dict(
+        add_image_tag=add_image_tag,
+        localhost=replace_image_tag_to_local
+    )
+
+    if command not in commands:
+        print(f"command must be one of ({', '.join(commands)}): {command}")
+        return sys.exit(1)
+
+
     try:
         with open(filename) as f:
             compose: ComposeYml = yaml.safe_load(f)
@@ -51,7 +66,7 @@ def main():
 
     abspath = os.path.abspath(filename)
     dirname = os.path.basename(os.path.dirname(abspath))
-    compose = convert(dirname, compose, mode == "local")
+    compose = commands[command](dirname, compose)
     with open(filename, 'w') as f:
         yaml.dump(compose, f)
 

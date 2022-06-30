@@ -94,12 +94,11 @@ runs:
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix pip install -r ${{ github.action_path }}requirements.txt
-    - if: fromJson(inputs.bake) || fromJson(inputs.localhost)
+    - if: fromJson(inputs.localhost)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        [ "${{ inputs.localhost }}" = "true" ]&&mode="local"||mode="remote"; \
-        $prefix python ${{ github.action_path }}convert.py ${{ inputs.file }} $mode
+        $prefix python ${{ github.action_path }}convert.py localhost ${{ inputs.file }}
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
@@ -111,6 +110,7 @@ runs:
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
         $prefix cd $(dirname ${{ inputs.file }}); \
+        $prefix python ${{ github.action_path }}convert.py add_image_tag ${{ inputs.file }}
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
             --set='*.cache-from=type=local,src=/tmp/.buildx-cache' \
