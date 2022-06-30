@@ -1,4 +1,7 @@
 # spin-up-docker-compose-action
+
+[![CI](https://github.com/yu-ichiro/spin-up-docker-compose-action/actions/workflows/main.yml/badge.svg)](https://github.com/yu-ichiro/spin-up-docker-compose-action/actions/workflows/main.yml)
+
 An action to spin up your docker compose environment within GitHub Actions. Caching and Optimizing, sharing image between jobs by using localhost registry.
 
 # Basic Usage
