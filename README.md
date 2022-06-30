@@ -8,7 +8,7 @@ steps:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Setup docker compose
-      uses: yu-ichiro/setup-docker-compose-action@main
+      uses: yu-ichiro/setup-docker-compose-action@v1
       with:
           file: compose.yml
     # docker compose environment available below
