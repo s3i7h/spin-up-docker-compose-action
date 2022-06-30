@@ -102,12 +102,12 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix pip install -r ${{ github.action_path }}requirements.txt
+        $prefix pip install -r ${{ github.action_path }}/requirements.txt
     - if: (fromJson(inputs.registry) && fromJson(inputs.localhost)) || fromJson(inputs.shared)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix python ${{ github.action_path }}convert.py localhost ${{ inputs.file }}
+        $prefix python ${{ github.action_path }}/convert.py localhost ${{ inputs.file }}
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
@@ -118,7 +118,7 @@ runs:
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         [ "${{ inputs.push }}" = "true" ]&&action="--push"||action="--load"; \
-        $prefix python ${{ github.action_path }}convert.py add_image_tag ${{ inputs.file }}; \
+        $prefix python ${{ github.action_path }}/convert.py add_image_tag ${{ inputs.file }}; \
         $prefix cd $(dirname ${{ inputs.file }}); \
         $prefix docker buildx bake \
             --builder="${{ steps.buildx.outputs.name }}" \
