@@ -1,5 +1,5 @@
-# setup-docker-compose-action
-An action to set up docker compose environment within GitHub Actions. Caching and Optimizing, sharing image between jobs by using localhost registry.
+# spin-up-docker-compose-action
+An action to spin up your docker compose environment within GitHub Actions. Caching and Optimizing, sharing image between jobs by using localhost registry.
 
 # Basic Usage
 
@@ -8,7 +8,7 @@ steps:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Setup docker compose
-      uses: yu-ichiro/setup-docker-compose-action@v1
+      uses: yu-ichiro/spin-up-docker-compose-action@v1
       with:
           file: compose.yml
     # docker compose environment available below
