@@ -94,7 +94,7 @@ runs:
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
         $prefix pip install -r ${{ github.action_path }}requirements.txt
-    - if: from(inputs.bake) || fromJson(inputs.localhost)
+    - if: fromJson(inputs.bake) || fromJson(inputs.localhost)
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
