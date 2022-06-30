@@ -98,7 +98,8 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix python ${{ github.action_path }}convert.py ${{ inputs.file }} ${{ fromJson(inputs.localhost) && "local" || "remote" }}
+        [ "${{ inputs.localhost }}" = "true" ]&&mode="local"||mode="remote"; \
+        $prefix python ${{ github.action_path }}convert.py ${{ inputs.file }} $mode
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
