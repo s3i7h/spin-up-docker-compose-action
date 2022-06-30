@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Docker Compose
-        uses: yu-ichiro/setup-docker-compose-action@main
+        uses: yu-ichiro/spin-up-docker-compose-action@main
         with:
           file: compose.yml
       - name: Check Batch Runner
