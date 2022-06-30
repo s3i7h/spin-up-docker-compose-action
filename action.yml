@@ -90,11 +90,20 @@ runs:
         $prefix docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2; \
         $prefix npx wait-on tcp:5000
     - if: fromJson(inputs.localhost)
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3'
+    - if: fromJson(inputs.localhost)
+      shell: bash
+      run: |
+        [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
+        $prefix pip install -r ${{ github.action_path }}/requirements.txt
+    - if: fromJson(inputs.localhost)
       id: localhost
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix echo TODO: localhost conversion
+        $prefix python ${{ github.action_path }}/convert.py
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
