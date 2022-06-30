@@ -1,6 +1,6 @@
 import os.path
 import sys
-from typing import TypedDict, Optional, Dict, List
+from typing import TypedDict, Optional, Dict
 
 import yaml
 
@@ -18,20 +18,30 @@ class ComposeYml(TypedDict):
     services: Dict[str, Service]
 
 
-def convert(context_name: str, compose: ComposeYml) -> ComposeYml:
+def convert(context_name: str, compose: ComposeYml, local: bool) -> ComposeYml:
     for name, service in compose["services"].items():
         if not service.get("build"):
             continue
         image_tag = f"{context_name}_{name}:latest"
-        service["image"] = f"localhost:5000/{image_tag}"
+        if "image" not in service:
+            service["image"] = image_tag
+        if local:
+            service["image"] = f"localhost:5000/{image_tag}"
     return compose
 
 
 def main():
-    if len(sys.argv) < 2:
+    argc = len(sys.argv)
+    if argc < 2:
         print("yaml filename is required")
         return sys.exit(1)
-    _, filename, *_ = sys.argv
+    if argc < 3:
+        print("mode (remote|local) is required")
+        return sys.exit(1)
+    _, filename, mode, *_ = sys.argv
+
+    if mode not in ("remote", "local"):
+        print(f"mode must be one of `remote` or `local`: {mode} given")
     try:
         with open(filename) as f:
             compose: ComposeYml = yaml.safe_load(f)
@@ -41,7 +51,7 @@ def main():
 
     abspath = os.path.abspath(filename)
     dirname = os.path.basename(os.path.dirname(abspath))
-    compose = convert(dirname, compose)
+    compose = convert(dirname, compose, mode == "local")
     with open(filename, 'w') as f:
         yaml.dump(compose, f)
 
