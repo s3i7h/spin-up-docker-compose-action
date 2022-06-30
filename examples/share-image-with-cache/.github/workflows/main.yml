@@ -19,6 +19,7 @@ jobs:
           registry: true
           localhost: true
           bake: true
+          push: true
   use_image:
     needs: build_image
     runs-on: ubuntu-latest
