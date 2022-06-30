@@ -97,13 +97,13 @@ runs:
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix pip install -r ${{ github.action_path }}/requirements.txt
+        $prefix pip install -r ${{ github.action_path }}requirements.txt
     - if: fromJson(inputs.localhost)
       id: localhost
       shell: bash
       run: |
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix python ${{ github.action_path }}/convert.py
+        $prefix python ${{ github.action_path }}convert.py
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
