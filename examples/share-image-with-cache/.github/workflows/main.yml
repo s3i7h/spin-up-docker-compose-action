@@ -19,6 +19,7 @@ jobs:
           shared: true
           bake: true
           push: true
+          up: false
   use_image:
     needs: build_image
     runs-on: ubuntu-latest
