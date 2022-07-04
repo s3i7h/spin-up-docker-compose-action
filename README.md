@@ -31,6 +31,7 @@ steps:
 * `bake-opts: string`: options to pass to `docker buildx bake`. `bake` must be `true` to use this. defaults to `""`
 * `up: bool`: whether to boot up docker compose. defaults to `true`
 * `up-opts: string`: options to pass to `docker compose up`. `up` must be `true` to use this. defaults to `"-d"`
+* `token: string`: GitHub token to push images to GitHub Containers Registry. defaults to value of github.token
 
 # Examples
 
