@@ -10,7 +10,12 @@ inputs:
     type: string
     required: true
   project-directory:
-    description: 'The path to run docker-compose'
+    description: 'the path to run docker-compose. defaults to ""'
+    type: string
+    required: false
+    default: ""
+  profile:
+    description: 'the profile to run services. defaults to ""'
     type: string
     required: false
     default: ""
@@ -122,9 +127,10 @@ runs:
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
-        [ "${{ inputs.project-directory }}" = "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.project-directory }}" != "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.profile }}" != "" ]&&profile="--profile ${{ inputs.profile }}"||profile=""; \
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix docker compose $projectDirectory  -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
+        $prefix docker compose $projectDirectory $profile -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
     - if: fromJson(inputs.bake)
       shell: bash
       run: |
@@ -142,6 +148,7 @@ runs:
     - if: fromJson(inputs.up)
       shell: bash
       run: |
-        [ "${{ inputs.project-directory }}" = "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.project-directory }}" != "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.profile }}" != "" ]&&profile="--profile ${{ inputs.profile }}"||profile=""; \
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix docker compose $projectDirectory -f "${{ inputs.file }}" up ${{ inputs.up-opts }}
+        $prefix docker compose $projectDirectory $profile -f "${{ inputs.file }}" up ${{ inputs.up-opts }}
