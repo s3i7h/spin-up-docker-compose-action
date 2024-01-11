@@ -9,6 +9,16 @@ inputs:
     description: 'the file to parse targets from, normally compose.yml. supported extensions: yml, json'
     type: string
     required: true
+  project-directory:
+    description: 'the path to run docker-compose. defaults to ""'
+    type: string
+    required: false
+    default: ""
+  profile:
+    description: 'the profile to run services. defaults to ""'
+    type: string
+    required: false
+    default: ""
   cache-key:
     description: 'the cache key to use for saving build data. defaults to "default"'
     type: string
@@ -117,8 +127,10 @@ runs:
     - if: fromJson(inputs.pull)
       shell: bash
       run: |
+        [ "${{ inputs.project-directory }}" != "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.profile }}" != "" ]&&profile="--profile ${{ inputs.profile }}"||profile=""; \
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix docker compose -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
+        $prefix docker compose $projectDirectory $profile -f "${{ inputs.file }}" pull ${{ inputs.pull-opts }}
     - if: fromJson(inputs.bake)
       shell: bash
       run: |
@@ -136,5 +148,7 @@ runs:
     - if: fromJson(inputs.up)
       shell: bash
       run: |
+        [ "${{ inputs.project-directory }}" != "" ]&&projectDirectory="--project-directory ${{ inputs.project-directory }}"||projectDirectory=""; \
+        [ "${{ inputs.profile }}" != "" ]&&profile="--profile ${{ inputs.profile }}"||profile=""; \
         [ "${{ inputs.dry-run }}" = "true" ]&&prefix="echo"; \
-        $prefix docker compose -f "${{ inputs.file }}" up ${{ inputs.up-opts }}
+        $prefix docker compose $projectDirectory $profile -f "${{ inputs.file }}" up ${{ inputs.up-opts }}
